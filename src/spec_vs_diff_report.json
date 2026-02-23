@@ -1,0 +1,125 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-16T04:14:11.927Z",
+  "summary": "Diff adds a Motoko backend actor with principal-keyed storage and access control checks, plus a React frontend with Internet Identity sign-in/out, basic app layout/routing, payment add dialog, print component, custom theme variables, and landing page rendering generated images. Several requested CRUD, receipt/payment management, filtering, and print-flow integration items are not evidenced in the provided diff summary (some files are omitted/truncated).",
+  "missing_requirements": [
+    {
+      "id": "REQ-2",
+      "requirement": "Backend CRUD endpoints for customers, service items, receipts, and payments (including update/delete), plus ability to list payments per receipt.",
+      "reason": "The backend file is truncated and only partial customer/business/profile-related functions are visible; no clear evidence of update/delete endpoints or full receipt/payment CRUD in the shown text.",
+      "evidence": [
+        "backend/main.mo (truncated)",
+        "frontend/src/hooks/useReceipts.ts (calls createReceipt/getReceiptsSorted but no update/delete shown)",
+        "frontend/src/hooks/usePayments.ts (add/get only; no delete shown)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Receipts persist computed totals including subtotal and tax/fees if configured.",
+      "reason": "Visible Receipt type includes only a single `total` (and `balance`) and no fields for subtotal or configurable tax/fees; no tax/fee configuration model or computations are evidenced in the shown backend portion.",
+      "evidence": [
+        "backend/main.mo (truncated: Receipt type has `total`, no subtotal/tax fields)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Allow deleting an incorrect payment entry and recalculating balance/status.",
+      "reason": "Frontend shows an add-payment flow, but no delete-payment hook/UI is evidenced; PaymentsList is explicitly a placeholder and does not list or allow deletion.",
+      "evidence": [
+        "frontend/src/components/payments/PaymentsList.tsx",
+        "frontend/src/hooks/usePayments.ts",
+        "frontend/src/components/payments/AddPaymentDialog.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Payment history UI that supports multiple payments per receipt and shows remaining balance/status updates.",
+      "reason": "PaymentsList component indicates payments are not actually displayed there (placeholder text), so a usable payment list/history view is not evidenced.",
+      "evidence": [
+        "frontend/src/components/payments/PaymentsList.tsx"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Receipt list page with search by receipt number/customer name and filtering by status, showing key columns (number, date, customer, total, status, balance).",
+      "reason": "ReceiptsListPage is referenced in routing but its implementation is not included in the diff summary; no evidence of filter/search UI or required columns is shown.",
+      "evidence": [
+        "frontend/src/App.tsx (routes to ReceiptsListPage)",
+        "frontend/src/hooks/useReceipts.ts"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Receipt detail includes a Print action that opens/uses a print-friendly layout.",
+      "reason": "A PrintableReceipt component and print CSS exist, but there is no evidence in the shown files that ReceiptDetailPage renders PrintableReceipt and provides a user-facing Print action.",
+      "evidence": [
+        "frontend/src/components/print/PrintableReceipt.tsx (truncated)",
+        "frontend/src/index.css (@media print)",
+        "frontend/src/App.tsx (routes to ReceiptDetailPage, but page code not shown)"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "All required generated image assets exist under frontend/public/assets/generated with the specified filenames.",
+      "reason": "LandingPage references two required filenames, but the actual image files are not shown in the diff summary (some added files are omitted), so existence of all three required assets cannot be verified from provided evidence.",
+      "evidence": [
+        "frontend/src/pages/Landing/LandingPage.tsx",
+        "File diff summary notes: 'Omitted files due to limits: added=11'"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Admin/backdoor-style access-control initialization via a secret URL parameter (caffeineAdminToken) and admin concepts in backend authorization.",
+      "reason": "BuildRequest does not request admin roles, secret tokens, or URL-parameter-based privilege initialization; it only specifies Internet Identity and scoping data to the signed-in principal.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts (getSecretParameter('caffeineAdminToken') and _initializeAccessControlWithSecret)",
+        "backend/main.mo (imports authorization modules; checks AccessControl.isAdmin in getUserProfile)"
+      ]
+    },
+    {
+      "description": "User profile setup flow (name/email) gating app access after authentication.",
+      "reason": "BuildRequest requires Internet Identity auth and business/receipt/payment tracking; it does not request separate user profile collection or a mandatory profile setup modal.",
+      "evidence": [
+        "frontend/src/App.tsx (shows ProfileSetupModal when userProfile === null)",
+        "frontend/src/components/auth/ProfileSetupModal.tsx",
+        "backend/main.mo (UserProfile type and profile management methods)"
+      ]
+    }
+  ],
+  "confidence": 0.62,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/LoginButton.tsx",
+    "frontend/src/components/auth/ProfileSetupModal.tsx",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/components/payments/AddPaymentDialog.tsx",
+    "frontend/src/components/payments/PaymentsList.tsx",
+    "frontend/src/components/print/PrintableReceipt.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useBusinessProfile.ts",
+    "frontend/src/hooks/useCurrentUserProfile.ts",
+    "frontend/src/hooks/useCustomers.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/usePayments.ts",
+    "frontend/src/hooks/useReceipts.ts",
+    "frontend/src/hooks/useServiceItems.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/money.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/Landing/LandingPage.tsx",
+    "frontend/src/pages/Receipts/ReceiptDetailPage.tsx",
+    "frontend/src/pages/Receipts/ReceiptFormPage.tsx",
+    "frontend/src/pages/Receipts/ReceiptsEmptyState.tsx",
+    "frontend/src/pages/Receipts/ReceiptsListPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

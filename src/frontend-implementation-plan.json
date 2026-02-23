@@ -1,0 +1,244 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Receipt & Payment Tracking (Frontend)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add Internet Identity sign-in/out and ensure all receipt/payment UI is accessible only when authenticated, with per-principal data isolation handled by authenticated actor usage.",
+      "acceptanceCriteria": [
+        "User can sign in and sign out using Internet Identity.",
+        "All created/updated/listed/deleted data is scoped to the authenticated principal.",
+        "Unauthenticated users cannot access receipt/payment data."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the app shell and route structure that gates all receipt/payment screens behind authentication (render a sign-in/landing experience when not authenticated), and provides a sign-out action that clears cached app data. Use the selected authorization component's frontend guidance (Internet Identity + profile setup flow) to structure authenticated vs guest views; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/AuthGate.tsx",
+          "operation": "create",
+          "description": "Add an AuthGate wrapper component that blocks access to protected screens when no identity is present, shows an access-denied/please-sign-in state for guests, and avoids data-fetching until authenticated. Use the selected authorization component’s recommended patterns for avoiding profile-setup modal flash; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Implement a first-login profile setup modal that calls backend getCallerUserProfile and saveCallerUserProfile to capture a human-friendly name (and email if desired by the existing backend type). Use the selected authorization component’s profile setup guidance; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create a login/logout button using the existing Internet Identity hook. On logout, clear React Query cache so no user data remains visible. Use the selected authorization component’s Login Component guidance; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Add a React Query hook to fetch getCallerUserProfile with correct loading semantics that depend on actor availability, matching the selected authorization component’s recommendation to prevent UI flash; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Ensure the top-level providers support authenticated/unauthenticated rendering and cache clearing (QueryClientProvider + InternetIdentityProvider are already present); wire any additional global providers needed by the new routing/auth gate."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Build receipt create/edit/view UI with customer selection, line item management, and real-time totals calculation prior to saving.",
+      "acceptanceCriteria": [
+        "User can create a new receipt from the UI, add multiple line items, and save it.",
+        "Totals update immediately as line items change (quantity/price).",
+        "User can view a receipt detail page with items, totals, customer info, and status."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Receipts/ReceiptFormPage.tsx",
+          "operation": "create",
+          "description": "Create a receipt create/edit form page that supports selecting a customer, adding/removing line items (service item + quantity + unit price), and shows subtotal/total calculations updating in real time before save. Compose existing shadcn/ui components (do not modify frontend/src/components/ui) and verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Receipts/ReceiptDetailPage.tsx",
+          "operation": "create",
+          "description": "Create a receipt detail page to display customer info, line items, totals, status, balance, and actions (edit, record payment, print). Compose existing shadcn/ui components (do not modify frontend/src/components/ui) and verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useReceipts.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for listing receipts and reading a single receipt from the list result, using the authenticated actor (via useActor). Ensure hooks are disabled until authenticated."
+        },
+        {
+          "path": "frontend/src/hooks/useCustomers.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for listing customers for receipt creation/editing, using the authenticated actor (via useActor). Ensure hooks are disabled until authenticated."
+        },
+        {
+          "path": "frontend/src/hooks/useServiceItems.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for listing service items for line item selection, using the authenticated actor (via useActor). Ensure hooks are disabled until authenticated."
+        },
+        {
+          "path": "frontend/src/lib/money.ts",
+          "operation": "create",
+          "description": "Implement frontend helpers to format bigint currency amounts and compute totals consistently (e.g., subtotal/total, payments sum, balance) to support real-time calculations and display."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the receipt create/edit/detail pages into the app navigation and routing so they are reachable from the receipts list and protected behind AuthGate."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add payment recording UI on receipts with method selection, multiple payments, balance/status updates, and deletion of incorrect payment entries.",
+      "acceptanceCriteria": [
+        "User can add a payment to a receipt and see the receipt status/balance update accordingly.",
+        "Multiple payments per receipt are supported.",
+        "User can delete an incorrect payment entry and the balance/status recalculates."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/payments/AddPaymentDialog.tsx",
+          "operation": "create",
+          "description": "Create an 'Add Payment' dialog for a receipt with fields for amount, date, method (Cash/Card/Bank Transfer/Other with text), and notes. Compose existing shadcn/ui components (do not modify frontend/src/components/ui) and verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/payments/PaymentsList.tsx",
+          "operation": "create",
+          "description": "Create a payments list component rendered on receipt detail showing all payments and allowing deletion of a selected payment entry (with confirmation). Compose existing shadcn/ui components (do not modify frontend/src/components/ui) and verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/usePayments.ts",
+          "operation": "create",
+          "description": "Add React Query hooks for listing payments for a receipt and mutating to add payments, with cache invalidation to refresh the receipt detail and recompute balance/status."
+        },
+        {
+          "path": "frontend/src/pages/Receipts/ReceiptDetailPage.tsx",
+          "operation": "modify",
+          "description": "Wire AddPaymentDialog and PaymentsList into the receipt detail view, and ensure the displayed balance/status updates immediately after add/delete actions by invalidating/refetching receipt/payment queries."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Provide a receipts list page with key columns and search/filter by status, receipt number, and customer name.",
+      "acceptanceCriteria": [
+        "Receipts list page shows key columns (receipt number, date, customer, total, status, balance).",
+        "User can filter by status and search by receipt number or customer name.",
+        "Selecting a receipt opens the receipt detail view."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Receipts/ReceiptsListPage.tsx",
+          "operation": "create",
+          "description": "Create the receipts list page with a table/card list showing receipt number, date, customer, total, status, and balance. Add quick status filters (Unpaid/Partially Paid/Paid mapped from backend statuses) and a search box that matches receipt number or customer name client-side. Compose existing shadcn/ui components (do not modify frontend/src/components/ui) and verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Receipts/ReceiptsEmptyState.tsx",
+          "operation": "create",
+          "description": "Create an empty state for when no receipts exist yet, including a CTA to create the first receipt and rendering at least one generated static image from frontend/public/assets/generated/hero-illustration.dim_1600x900.png. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the receipts list page into navigation and make it the default authenticated landing screen; clicking a receipt navigates to the receipt detail view."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Add a print-friendly receipt view accessible from receipt detail using browser print, including business header, receipt info, items, totals, and payment summary.",
+      "acceptanceCriteria": [
+        "Receipt detail includes a Print action that opens/uses a print-friendly layout.",
+        "Printed view fits on typical receipt/invoice page sizes and remains readable.",
+        "Printed view includes business name and contact fields when set."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/print/PrintableReceipt.tsx",
+          "operation": "create",
+          "description": "Create a print-friendly receipt layout component that includes business profile header (when available), receipt number/date, customer, line items, totals, and payment summary."
+        },
+        {
+          "path": "frontend/src/hooks/useBusinessProfile.ts",
+          "operation": "create",
+          "description": "Add a React Query hook to fetch the business profile for rendering in the printable receipt header when set."
+        },
+        {
+          "path": "frontend/src/pages/Receipts/ReceiptDetailPage.tsx",
+          "operation": "modify",
+          "description": "Add a Print action that triggers browser printing and ensures PrintableReceipt is used for print layout (either via a dedicated print section in the page or print-only rendering)."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Add print media styles to ensure the printable receipt layout is clean and readable on standard page sizes (hide navigation/actions in print, set typographic scale, and ensure tables/sections break well)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Apply a professional, non-default visual theme consistently across navigation, forms, lists, and receipt detail/print screens.",
+      "acceptanceCriteria": [
+        "App uses a consistent theme across all pages (navigation, buttons, forms, tables/cards).",
+        "Color palette is not the default blue/purple aesthetic.",
+        "UI looks professional and business-oriented (legible typography, clear hierarchy)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Define/adjust global CSS variables and base typography to a warm-neutral, professional palette (avoid default blue/purple) and consistent spacing/typography. Ensure styles apply app-wide, including print rules."
+        },
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "create",
+          "description": "Create a consistent application layout (header/nav + content container) used by all authenticated pages for cohesive look and clear hierarchy. Compose existing shadcn/ui components (do not modify frontend/src/components/ui) and verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap authenticated routes in AppLayout to apply consistent navigation and page structure across lists, forms, and receipt detail."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Add required generated static images under frontend/public/assets/generated and render at least one in the UI (landing and/or empty states) without using the backend to serve them.",
+      "acceptanceCriteria": [
+        "All required images exist under frontend/public/assets/generated with the specified filenames.",
+        "At least one generated image is displayed in the UI (landing and/or empty state).",
+        "No backend endpoints are used to serve these static images."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/app-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated static image asset: Minimal professional app logo mark, receipt + coin motif, flat vector style (app-logo.dim_512x512.png)."
+        },
+        {
+          "path": "frontend/public/assets/generated/hero-illustration.dim_1600x900.png",
+          "operation": "create",
+          "description": "Add the generated static image asset: Clean illustration of a service professional issuing a receipt at a counter, warm neutral palette, flat vector (hero-illustration.dim_1600x900.png)."
+        },
+        {
+          "path": "frontend/public/assets/generated/icons-set.dim_384x128.png",
+          "operation": "create",
+          "description": "Add the generated static image asset: Small set of 3 monochrome line icons: receipt, payment, customer, consistent stroke (icons-set.dim_384x128.png)."
+        },
+        {
+          "path": "frontend/src/pages/Landing/LandingPage.tsx",
+          "operation": "create",
+          "description": "Create an unauthenticated landing/sign-in page that displays frontend/public/assets/generated/hero-illustration.dim_1600x900.png and frontend/public/assets/generated/app-logo.dim_512x512.png, explains the app briefly in English, and includes the LoginButton. Compose existing shadcn/ui components (do not modify frontend/src/components/ui) and verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire LandingPage into the unauthenticated app flow and ensure at least one generated image is visible on landing and/or empty states without routing images through the backend."
+        }
+      ]
+    }
+  ]
+}

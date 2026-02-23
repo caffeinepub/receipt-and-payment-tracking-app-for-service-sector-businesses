@@ -1,0 +1,159 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-internet-identity-authentication-and-associate-all-receipt-payment-data-with-the-signed-in-principal-so-each-user-only-sees-and-manages-their-own-business-records",
+      "featureTitle": "Implement Internet Identity authentication and associate all receipt/payment data with the signed-in principal so each user only sees and manages their own business records.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/LoginButton.tsx",
+        "frontend/src/components/auth/ProfileSetupModal.tsx",
+        "frontend/src/hooks/useCurrentUserProfile.ts",
+        "frontend/src/main.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-core-ui-flows-to-create-view-edit-and-manage-receipts-for-a-service-business-including-selecting-a-customer-adding-removing-line-items-and-showing-calculated-totals-in-real-time-before-saving",
+      "featureTitle": "Build core UI flows to create, view, edit, and manage receipts for a service business, including selecting a customer, adding/removing line items, and showing calculated totals in real time before saving.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/hooks/useCustomers.ts",
+        "frontend/src/hooks/useReceipts.ts",
+        "frontend/src/hooks/useServiceItems.ts",
+        "frontend/src/lib/money.ts",
+        "frontend/src/pages/Receipts/ReceiptDetailPage.tsx",
+        "frontend/src/pages/Receipts/ReceiptFormPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-payment-recording-ui-for-receipts-no-external-payment-processing-allow-users-to-add-one-or-more-payments-to-a-receipt-choose-a-payment-method-e-g-cash-card-bank-transfer-other-and-see-remaining-balance-update",
+      "featureTitle": "Add payment recording UI for receipts (no external payment processing): allow users to add one or more payments to a receipt, choose a payment method (e.g., Cash, Card, Bank Transfer, Other), and see remaining balance update.",
+      "files": [
+        "frontend/src/components/payments/AddPaymentDialog.tsx",
+        "frontend/src/components/payments/PaymentsList.tsx",
+        "frontend/src/hooks/usePayments.ts",
+        "frontend/src/pages/Receipts/ReceiptDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-provide-receipt-list-and-search-filter-views-suitable-for-service-sector-operations-list-receipts-by-date-status-customer-and-allow-quick-filtering-e-g-unpaid-paid",
+      "featureTitle": "Provide receipt list and search/filter views suitable for service-sector operations: list receipts by date, status, customer, and allow quick filtering (e.g., Unpaid/Paid).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/Receipts/ReceiptsEmptyState.tsx",
+        "frontend/src/pages/Receipts/ReceiptsListPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-printable-receipt-view-browser-print-with-a-clean-receipt-layout-including-business-header-receipt-number-date-customer-line-items-totals-and-payment-summary",
+      "featureTitle": "Add a printable receipt view (browser print) with a clean receipt layout including business header, receipt number/date, customer, line items, totals, and payment summary.",
+      "files": [
+        "frontend/src/components/print/PrintableReceipt.tsx",
+        "frontend/src/hooks/useBusinessProfile.ts",
+        "frontend/src/index.css",
+        "frontend/src/pages/Receipts/ReceiptDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-establish-a-coherent-distinctive-visual-theme-for-the-app-colors-typography-spacing-components-appropriate-for-professional-service-businesses-apply-it-consistently-across-navigation-lists-forms-and-receipt-detail-print-screens-avoid-default-blue-purple-styling",
+      "featureTitle": "Establish a coherent, distinctive visual theme for the app (colors, typography, spacing, components) appropriate for professional service businesses; apply it consistently across navigation, lists, forms, and receipt detail/print screens (avoid default blue/purple styling).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/AppLayout.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-and-include-required-static-image-assets-store-them-in-frontend-public-assets-generated-and-render-them-in-the-ui-e-g-on-the-sign-in-landing-and-empty-states-without-routing-images-through-the-backend",
+      "featureTitle": "Generate and include required static image assets, store them in frontend/public/assets/generated, and render them in the UI (e.g., on the sign-in/landing and empty states) without routing images through the backend.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/Landing/LandingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

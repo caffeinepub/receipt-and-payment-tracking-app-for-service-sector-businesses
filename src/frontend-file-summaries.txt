@@ -1,0 +1,23 @@
+{
+  "frontend/src/App.tsx": "Main application component with TanStack Router setup, authentication flow via RootComponent, profile setup modal, and theme provider integration.",
+  "frontend/src/hooks/useCurrentUserProfile.ts": "React Query hook to fetch the current user's profile with proper loading state management that depends on actor availability.",
+  "frontend/src/hooks/useReceipts.ts": "React Query hooks for fetching receipts list and creating new receipts with cache invalidation.",
+  "frontend/src/hooks/useCustomers.ts": "React Query hooks for fetching and adding customers with cache invalidation.",
+  "frontend/src/hooks/useServiceItems.ts": "React Query hooks for fetching and adding service items with cache invalidation.",
+  "frontend/src/hooks/usePayments.ts": "React Query hooks for fetching receipt payments and adding new payments with cache invalidation.",
+  "frontend/src/hooks/useBusinessProfile.ts": "React Query hooks for fetching and saving business profile information with cache invalidation.",
+  "frontend/src/lib/money.ts": "Utility functions for currency formatting, parsing, and calculating receipt/payment totals using bigint.",
+  "frontend/src/components/auth/LoginButton.tsx": "Internet Identity login/logout button component with query cache clearing on logout.",
+  "frontend/src/components/auth/ProfileSetupModal.tsx": "Modal dialog for first-time user profile setup requiring name and optional email.",
+  "frontend/src/components/layout/AppLayout.tsx": "Main application layout with header, navigation, outlet for child routes, and footer with attribution.",
+  "frontend/src/pages/Landing/LandingPage.tsx": "Unauthenticated landing page with hero section, feature highlights, and generated images.",
+  "frontend/src/pages/Receipts/ReceiptsListPage.tsx": "Receipts list page with search, status filtering, and table display of all receipts.",
+  "frontend/src/pages/Receipts/ReceiptsEmptyState.tsx": "Empty state component displayed when no receipts exist, with CTA to create first receipt.",
+  "frontend/src/pages/Receipts/ReceiptDetailPage.tsx": "Receipt detail page showing customer info, line items, totals, payments, and print functionality.",
+  "frontend/src/pages/Receipts/ReceiptFormPage.tsx": "Receipt creation form with customer selection, line item management, real-time total calculation, and inline dialogs for adding customers and services.",
+  "frontend/src/components/payments/AddPaymentDialog.tsx": "Dialog component for recording payments on a receipt with amount, method, and notes fields.",
+  "frontend/src/components/payments/PaymentsList.tsx": "Component for displaying payment history on a receipt (placeholder as payments are embedded in receipt).",
+  "frontend/src/components/print/PrintableReceipt.tsx": "Print-friendly receipt layout with business header, line items, totals, and payment summary.",
+  "frontend/src/index.css": "Global styles with warm neutral OKLCH color system for light/dark modes and print media queries.",
+  "frontend/tailwind.config.js": "Tailwind configuration with custom warm neutral color palette, Inter font, and extended design tokens."
+}
